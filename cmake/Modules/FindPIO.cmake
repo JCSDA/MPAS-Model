@@ -8,8 +8,8 @@
 # Components available for query:
 #  C - Has C support
 #  Fortran - Has Fortran support
-#  <Lang>_STATIC - Has static targets for Lang
-#  <Lang>_SHARED - Has shared targets for Lang
+#  STATIC - Has static targets for supported LANG
+#  SHARED - Has shared targets for supported LANG
 #
 # Variables provided:
 #  PIO_FOUND - True if PIO was found
@@ -61,24 +61,12 @@ if(PIO_INCLUDE_DIR)
     if(PIO_C_STATIC_FOUND OR PIO_C_SHARED_FOUND)
         set(PIO_C_FOUND 1)
     endif()
-
-    #Check for link dependencies for static libraries
-    if(PIO_Fortran_STATIC_FOUND OR PIO_C_STATIC_FOUND)
-        if(NOT (NetCDF_Fortran_FOUND AND NetCDF_C_FOUND))
-            find_package(NetCDF COMPONENTS Fortran C QUIET)
-        endif()
-#         if( (NOT NetCDF_C_FOUND) OR NetCDF_C_FOUND_SHARED )
-#             message(WARNING "PIO C STATIC libraries found which require static NetCDF_C libraries, "
-#                             "which could not be found.  Disabling static PIO C libary.")
-#             set(PIO_C_STATIC_FOUND 0)
-#         endif()
-#         if( (NOT NetCDF_Fortran_FOUND) OR NetCDF_Fortran_LIBRARY_SHARED OR (NOT NetCDF_C_FOUND) OR NetCDF_C_LIBRARY_SHARED )
-#             message(WARNING "PIO Fortran STATIC Libraries found which require static NetCDF_Fortran and NetCDF_C libraries, "
-#                             "which could not be found.  Disabling static PIO Fortran libary.")
-#             set(PIO_Fortran_STATIC_FOUND 0)
-#         endif()
+    if(PIO_C_SHARED_FOUND AND (NOT PIO_Fortran_FOUND OR PIO_Fortran_SHARED_FOUND))
+        set(PIO_SHARED_FOUND 1)
     endif()
-
+    if(PIO_C_STATIC_FOUND AND (NOT PIO_Fortran_FOUND OR PIO_Fortran_STATIC_FOUND))
+        set(PIO_STATIC_FOUND 1)
+    endif()
 endif()
 
 ## Debugging output
@@ -90,10 +78,9 @@ message(DEBUG "[FindPIO] PIO_Fortran_SHARED_LIB: ${PIO_Fortran_SHARED_LIB}")
 message(DEBUG "[FindPIO] PIO_C_STATIC_LIB: ${PIO_C_STATIC_LIB}")
 message(DEBUG "[FindPIO] PIO_C_SHARED_LIB: ${PIO_C_SHARED_LIB}")
 message(DEBUG "[FindPIO] PIO_Fortran_FOUND: ${PIO_Fortran_FOUND}")
-message(DEBUG "[FindPIO] PIO_Fortran_STATIC_FOUND: ${PIO_Fortran_STATIC_FOUND}")
 message(DEBUG "[FindPIO] PIO_C_FOUND: ${PIO_C_FOUND}")
-message(DEBUG "[FindPIO] PIO_C_SHARED_FOUND: ${PIO_C_SHARED_FOUND}")
-message(DEBUG "[FindPIO] PIO_C_STATIC_FOUND: ${PIO_C_STATIC_FOUND}")
+message(DEBUG "[FindPIO] PIO_SHARED_FOUND: ${PIO_SHARED_FOUND}")
+message(DEBUG "[FindPIO] PIO_STATIC_FOUND: ${PIO_STATIC_FOUND}")
 
 ## Check package has been found correctly
 include(FindPackageHandleStandardArgs)
@@ -111,7 +98,7 @@ set(_new_components)
 
 
 # PIO::PIO_Fortran_STATIC imported interface target
-if(PIO_Fortran_STATIC_FOUND AND NOT TARGET PIO::PIO_Fortran_STATIC)
+if(PIO_Fortran_FOUND AND PIO_STATIC_FOUND AND NOT TARGET PIO::PIO_Fortran_STATIC)
     add_library(PIO::PIO_Fortran_STATIC INTERFACE IMPORTED)
     set_target_properties(PIO::PIO_Fortran_STATIC PROPERTIES
                             INTERFACE_INCLUDE_DIRECTORIES ${PIO_INCLUDE_DIR}
@@ -125,7 +112,7 @@ if(PIO_Fortran_STATIC_FOUND AND NOT TARGET PIO::PIO_Fortran_STATIC)
 endif()
 
 # PIO::PIO_Fortran_SHARED imported interface target
-if(PIO_Fortran_SHARED_FOUND AND NOT TARGET PIO::PIO_Fortran_SHARED)
+if(PIO_Fortran_FOUND AND PIO_SHARED_FOUND AND NOT TARGET PIO::PIO_Fortran_SHARED)
     add_library(PIO::PIO_Fortran_SHARED INTERFACE IMPORTED)
     set_target_properties(PIO::PIO_Fortran_SHARED PROPERTIES
                             INTERFACE_INCLUDE_DIRECTORIES ${PIO_INCLUDE_DIR}
@@ -138,7 +125,7 @@ if(PIO_Fortran_SHARED_FOUND AND NOT TARGET PIO::PIO_Fortran_SHARED)
 endif()
 
 # PIO::PIO_C_STATIC imported interface target
-if(PIO_C_STATIC_FOUND AND NOT TARGET PIO::PIO_C_STATIC)
+if(PIO_C_FOUND AND PIO_STATIC_FOUND AND NOT TARGET PIO::PIO_C_STATIC)
     add_library(PIO::PIO_C_STATIC INTERFACE IMPORTED)
     set_target_properties(PIO::PIO_C_STATIC PROPERTIES
                             INTERFACE_INCLUDE_DIRECTORIES ${PIO_INCLUDE_DIR}
@@ -149,7 +136,7 @@ if(PIO_C_STATIC_FOUND AND NOT TARGET PIO::PIO_C_STATIC)
 endif()
 
 # PIO::PIO_C_SHARED imported interface target
-if(PIO_C_SHARED_FOUND AND NOT TARGET PIO::PIO_C_SHARED)
+if(PIO_C_FOUND AND PIO_SHARED_FOUND AND NOT TARGET PIO::PIO_C_SHARED)
     add_library(PIO::PIO_C_SHARED INTERFACE IMPORTED)
     set_target_properties(PIO::PIO_C_SHARED PROPERTIES
                             INTERFACE_INCLUDE_DIRECTORIES ${PIO_INCLUDE_DIR}
@@ -177,7 +164,7 @@ if(${CMAKE_FIND_PACKAGE_NAME}_FOUND AND NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIE
     message( STATUS "Find${CMAKE_FIND_PACKAGE_NAME}:" )
     message( STATUS "  - ${CMAKE_FIND_PACKAGE_NAME}_PREFIX [${${CMAKE_FIND_PACKAGE_NAME}_PREFIX}]")
     set(_found_comps)
-    foreach( _comp IN ITEMS Fortran Fortran_STATIC Fortran_SHARED C C_STATIC C_SHARED )
+    foreach( _comp IN ITEMS Fortran C STATIC SHARED )
         if( ${CMAKE_FIND_PACKAGE_NAME}_${_comp}_FOUND )
             list(APPEND _found_comps ${_comp})
         endif()

@@ -51,7 +51,6 @@ if(NOT MPAS_GIT_VERSION)
 endif()
 
 ### Dependencies
-
 find_package(OpenMP COMPONENTS Fortran)
 find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(NetCDF REQUIRED COMPONENTS Fortran)
