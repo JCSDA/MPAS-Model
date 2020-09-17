@@ -10,10 +10,11 @@
 #  * OpenMP - True if OpenMP support is enabled
 #  * core_atmosphere - Find atmosphere core
 #  * core_init_atmosphere - Find init_atmosphere core
-#  * core_landice - Find landice core
 #  * core_ocean - Find ocean core
-#  * core_sw - Find ocean core
-#  * core_test - Find ocean core
+#  * core_landice - Find landice core
+#  * core_seaice - Find seaice core
+#  * core_sw - Find sw core
+#  * core_test - Find test core
 #
 #
 # Output variables set:
