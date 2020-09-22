@@ -1,6 +1,6 @@
 ## MPAS-Model
 cmake_minimum_required(VERSION 3.12)
-project(MPAS LANGUAGES C Fortran VERSION 6.1 DESCRIPTION "MPAS - Model for Prediction Across Scales")
+project(MPAS LANGUAGES C Fortran VERSION 7.0 DESCRIPTION "MPAS - Model for Prediction Across Scales")
 
 ### Global Configuration
 

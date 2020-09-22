@@ -131,9 +131,15 @@ target_compile_definitions(core_atmosphere PRIVATE mpas=1)
 
 #Get physics_wrf tables from MPAS-Data
 include(FetchContent)
+if(${PROJECT_VERSION} VERSION_GREATER_EQUAL 7.0)
+   set(MPAS_DATA_GIT_TAG v${PROJECT_VERSION})
+else()
+   set(MPAS_DATA_GIT_TAG master)
+endif()
+
 FetchContent_Declare(mpas_data
                      GIT_REPOSITORY https://github.com/MPAS-Dev/MPAS-Data.git
-                     GIT_TAG master
+                     GIT_TAG ${MPAS_DATA_GIT_TAG}
                      GIT_PROGRESS True
                      GIT_SHALLOW True)
 FetchContent_Populate(mpas_data)
