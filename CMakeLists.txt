@@ -63,7 +63,11 @@ endif()
 # Find C pre-processor
 if(CMAKE_C_COMPILER_ID MATCHES GNU)
     find_program(CPP_EXECUTABLE NAMES cpp REQUIRED)
+    set(CPP_EXTRA_FLAGS -traditional)
+elseif(CMAKE_C_COMPILER_ID MATCHES "(Apple)?Clang" )
+    find_program(CPP_EXECUTABLE NAMES cpp REQUIRED)
 else()
+    message(STATUS "Unknown compiler: ${CMAKE_C_COMPILER_ID}")
     set(CPP_EXECUTABLE ${CMAKE_C_COMPILER})
 endif()
 
@@ -180,7 +184,7 @@ macro(mpas_core_target)
 
     #Process registry and generate includes, namelists, and streams
     add_custom_command(OUTPUT Registry_processed.xml
-                       COMMAND ${CPP_EXECUTABLE} -E -P -traditional ${CMAKE_CURRENT_SOURCE_DIR}/Registry.xml -o Registry_processed.xml
+                       COMMAND ${CPP_EXECUTABLE} -E -P ${CPP_EXTRA_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/Registry.xml > Registry_processed.xml
                        COMMENT "CORE ${_ARG_CORE}: Pre-Process Registry"
                        DEPENDS Registry.xml)
     add_custom_command(OUTPUT ${_ARG_INCLUDES}
