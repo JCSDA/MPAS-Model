@@ -179,7 +179,6 @@ int build_struct_package_lists(ezxml_t currentPosition, char * out_packages){/*{
 	int empty_struct;
 
 	package_list = ezxml_attr(currentPosition, "packages");
-
 	empty_packages = 0;
 	empty_struct = 1;
 
@@ -226,7 +225,8 @@ int build_struct_package_lists(ezxml_t currentPosition, char * out_packages){/*{
 				if(out_packages[0] == '\0'){
 					sprintf(out_packages, "%s", token);
 				} else if(add_package_to_list(token, out_packages)){
-					strcat(out_packages, token-1);
+					strcat(out_packages, ";");
+					strcat(out_packages, token);
 				}
 
 				while( (token = strsep(&string, ";")) != NULL){
@@ -250,7 +250,8 @@ int build_struct_package_lists(ezxml_t currentPosition, char * out_packages){/*{
 					if(out_packages[0] == '\0'){
 						sprintf(out_packages, "%s", token);
 					} else if(add_package_to_list(token, out_packages)){
-						strcat(out_packages, token-1);
+						strcat(out_packages, ";");
+						strcat(out_packages, token);
 					}
 
 					while( (token = strsep(&string, ";")) != NULL){
@@ -276,7 +277,8 @@ int build_struct_package_lists(ezxml_t currentPosition, char * out_packages){/*{
 				if(out_packages[0] == '\0'){
 					sprintf(out_packages, "%s", token);
 				} else if(add_package_to_list(token, out_packages)){
-					strcat(out_packages, token-1);
+					strcat(out_packages, ";");
+					strcat(out_packages, token);
 				}
 
 				while( (token = strsep(&string, ";")) != NULL){
@@ -1671,7 +1673,7 @@ int parse_struct(FILE *fd, ezxml_t registry, ezxml_t superStruct, int subpool, c
 
 	structname = ezxml_attr(superStruct, "name");
 	structnameincode = ezxml_attr(superStruct, "name_in_code");
-	
+
 	if(!structnameincode){
 		structnameincode = ezxml_attr(superStruct, "name");
 	}
@@ -2122,7 +2124,6 @@ int generate_immutable_streams(ezxml_t registry){/*{{{*/
 											fortprintf(fd, "   call MPAS_stream_mgr_add_field(manager, \'%s\', \'%s\', packages=packages, ierr=ierr)\n", optname, optvarname);
 										else
 											fortprintf(fd, "   call MPAS_stream_mgr_add_field(manager, \'%s\', \'%s\', ierr=ierr)\n", optname, optvarname);
-										
 									}
 
 									/* Loop over arrays of fields listed within the stream */
@@ -2570,5 +2571,3 @@ int parse_structs_from_registry(ezxml_t registry)/*{{{*/
 
 	return 0;
 }/*}}}*/
-
-
