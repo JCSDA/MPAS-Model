@@ -32,7 +32,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # Set default build type to RelWithDebInfo
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "Setting default build type to Release.  Specify CMAKE_BUILD_TYPE to override.")
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "CMake Build type" FORCE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "CMake Build type" FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
