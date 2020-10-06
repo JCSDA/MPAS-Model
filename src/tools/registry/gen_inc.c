@@ -179,6 +179,7 @@ int build_struct_package_lists(ezxml_t currentPosition, char * out_packages){/*{
 	int empty_struct;
 
 	package_list = ezxml_attr(currentPosition, "packages");
+
 	empty_packages = 0;
 	empty_struct = 1;
 
