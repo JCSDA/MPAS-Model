@@ -65,7 +65,13 @@
              description="Cloud fraction at high levels using UPP method"/>
 
         <var name="cldfrac_tot_UPP"         type="real"     dimensions="nCells Time" units="unitless"
-             description="Total cloud fraction using UPP method"/>
+             description="Total cloud fraction using UPP column max method"/>
+
+        <var name="cldfrac_tot_UKMO_max"    type="real"     dimensions="nCells Time" units="unitless"
+             description="Total cloud fraction using UKMO max/random overlapping method"/>
+
+        <var name="cldfrac_tot_UKMO_rand"   type="real"     dimensions="nCells Time" units="unitless"
+             description="Total cloud fraction using UKMO random overlapping method"/>
 
 </var_struct>
 
