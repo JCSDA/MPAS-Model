@@ -262,8 +262,13 @@ module convective_diagnostics
         real (kind=RKIND), dimension(:), pointer :: cldfrac_mid_UPP
         real (kind=RKIND), dimension(:), pointer :: cldfrac_high_UPP
         real (kind=RKIND), dimension(:), pointer :: cldfrac_tot_UPP
+        real (kind=RKIND), dimension(:), pointer :: cldfrac_low_UKMO
+        real (kind=RKIND), dimension(:), pointer :: cldfrac_mid_UKMO
+        real (kind=RKIND), dimension(:), pointer :: cldfrac_high_UKMO
         real (kind=RKIND), dimension(:), pointer :: cldfrac_tot_UKMO_max
         real (kind=RKIND), dimension(:), pointer :: cldfrac_tot_UKMO_rand
+        real (kind=RKIND), dimension(:), pointer :: cldht_top_UKMO
+        real (kind=RKIND), dimension(:), pointer :: cldht_base_UKMO
 
         ! Other fields used in the computation of convective diagnostics 
         ! defined above
@@ -293,6 +298,11 @@ module convective_diagnostics
 
         ! levels for low/mid/high cloud fraction - UPP method
         real (kind=RKIND), parameter :: ptop_low = 64200.0, ptop_mid = 35000.0, ptop_high = 15000.0
+
+        ! levels for low/mid/high cloud fraction - UKMO method
+        real (kind=RKIND), parameter :: ptop_low_ = 80000.0, ptop_mid_ = 50000.0, ptop_high_ = 15000.0
+        real (kind=RKIND), parameter :: thresh_cld = 0.0627
+        real (kind=RKIND), parameter :: msgval = -999.0
 
         real (kind=RKIND), dimension(:,:), allocatable :: cldfrac2
 
@@ -337,8 +347,13 @@ module convective_diagnostics
         need_cldfrac_UPP = MPAS_field_will_be_written('cldfrac_high_UPP') .or. need_cldfrac_UPP
         need_cldfrac_UPP = MPAS_field_will_be_written('cldfrac_tot_UPP')  .or. need_cldfrac_UPP
         need_any_diags = need_any_diags .or. need_cldfrac_UPP
-        need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_tot_UKMO_max')
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_low_UKMO')
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_mid_UKMO')      .or. need_cldfrac_UKMO
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_high_UKMO')     .or. need_cldfrac_UKMO
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_tot_UKMO_max')  .or. need_cldfrac_UKMO
         need_cldfrac_UKMO = MPAS_field_will_be_written('cldfrac_tot_UKMO_rand') .or. need_cldfrac_UKMO
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldht_top_UKMO')        .or. need_cldfrac_UKMO
+        need_cldfrac_UKMO = MPAS_field_will_be_written('cldht_base_UKMO')       .or. need_cldfrac_UKMO
         need_any_diags = need_any_diags .or. need_cldfrac_UKMO
 
         if (need_any_diags) then
@@ -369,8 +384,13 @@ module convective_diagnostics
                 call mpas_pool_get_array(diag, 'cldfrac_tot_UPP',  cldfrac_tot_UPP)
             end if
             if ( need_cldfrac_UKMO ) then
+                call mpas_pool_get_array(diag, 'cldfrac_low_UKMO',  cldfrac_low_UKMO)
+                call mpas_pool_get_array(diag, 'cldfrac_mid_UKMO',  cldfrac_mid_UKMO)
+                call mpas_pool_get_array(diag, 'cldfrac_high_UKMO', cldfrac_high_UKMO)
                 call mpas_pool_get_array(diag, 'cldfrac_tot_UKMO_max',  cldfrac_tot_UKMO_max)
                 call mpas_pool_get_array(diag, 'cldfrac_tot_UKMO_rand', cldfrac_tot_UKMO_rand)
+                call mpas_pool_get_array(diag, 'cldht_top_UKMO',  cldht_top_UKMO)
+                call mpas_pool_get_array(diag, 'cldht_base_UKMO', cldht_base_UKMO)
             end if
 
             call mpas_pool_get_array(mesh, 'zgrid', height)
@@ -384,6 +404,12 @@ module convective_diagnostics
             call mpas_pool_get_array(diag, 'pressure_p', pressure_p)
             if ( need_cldfrac_UPP .or. need_cldfrac_UKMO ) then
                 call mpas_pool_get_array(diag_physics, 'cldfrac', cldfrac)
+                ! do we impose 0.0/1.0 limit to cldfrac here?
+                do iCell = 1, nCells
+                   do k = 1, nVertLevels
+                      cldfrac(k,iCell) = max(min(cldfrac(k,iCell),1.0),0.0)
+                   end do
+                end do
             end if
 
             call mpas_pool_get_dimension(state, 'index_qv', index_qv)
@@ -535,6 +561,43 @@ module convective_diagnostics
             end if
 
             if ( need_cldfrac_UKMO ) then
+
+                do iCell = 1, nCellsSolve
+                    cldfrac_low_UKMO (iCell) = 0.0
+                    cldfrac_mid_UKMO (iCell) = 0.0
+                    cldfrac_high_UKMO(iCell) = 0.0
+                    p_in(1:nVertLevels) = pressure_p(1:nVertLevels,iCell) + pressure_base(1:nVertLevels,iCell)
+                    do k = 1, nVertLevels
+                       if ( p_in(k) >= ptop_low_ ) then
+                           cldfrac_low_UKMO(iCell)  = max(cldfrac_low_UKMO(iCell), cldfrac(k,iCell))
+                       else if ( p_in(k) < ptop_low_ .and. p_in(k) >= ptop_mid_  ) then
+                           cldfrac_mid_UKMO(iCell)  = max(cldfrac_mid_UKMO(iCell), cldfrac(k,iCell))
+                       else if ( p_in(k) < ptop_mid_ .and. p_in(k) >= ptop_high_ ) then
+                           cldfrac_high_UKMO(iCell) = max(cldfrac_high_UKMO(iCell), cldfrac(k,iCell))
+                       end if
+                    end do
+                end do
+
+                do iCell = 1, nCellsSolve
+                    cldht_base_UKMO (iCell) = msgval
+                    cldht_top_UKMO  (iCell) = msgval
+                    zp(1:nVertLevels) = 0.5*(height(1:nVertLevels,iCell)+height(2:nVertlevels+1,iCell)) - height(1,iCell)
+                    do k = 1, nVertLevels
+                       if ( cldht_base_UKMO (iCell) == msgval ) then
+                           ! bottom-up check k
+                           if ( cldfrac(k,iCell) >= thresh_cld ) then
+                               cldht_base_UKMO (iCell) = zp(k)
+                           end if
+                       end if
+                       if ( cldht_top_UKMO (iCell) == msgval ) then
+                           ! top-down check nVertLevels-k+1
+                           if ( cldfrac(nVertLevels-k+1,iCell) >= thresh_cld ) then
+                               cldht_top_UKMO (iCell) = zp(nVertLevels-k+1)
+                           end if
+                       end if
+                    end do
+                end do
+
                 allocate (cldfrac2(nCellsSolve,nVertLevels))
                 ! swap cldfrac dimensions to conform to r2_calc_total_cloud_cover requirement
                 do iCell = 1, nCellsSolve

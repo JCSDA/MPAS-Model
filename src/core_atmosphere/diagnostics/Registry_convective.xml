@@ -67,11 +67,26 @@
         <var name="cldfrac_tot_UPP"         type="real"     dimensions="nCells Time" units="unitless"
              description="Total cloud fraction using UPP column max method"/>
 
+        <var name="cldfrac_low_UKMO"        type="real"     dimensions="nCells Time" units="unitless"
+             description="Cloud fraction at low levels using UKMO method"/>
+
+        <var name="cldfrac_mid_UKMO"        type="real"     dimensions="nCells Time" units="unitless"
+             description="Cloud fraction at mid levels using UKMO method"/>
+
+        <var name="cldfrac_high_UKMO"       type="real"     dimensions="nCells Time" units="unitless"
+             description="Cloud fraction at high levels using UKMO method"/>
+
         <var name="cldfrac_tot_UKMO_max"    type="real"     dimensions="nCells Time" units="unitless"
              description="Total cloud fraction using UKMO max/random overlapping method"/>
 
         <var name="cldfrac_tot_UKMO_rand"   type="real"     dimensions="nCells Time" units="unitless"
              description="Total cloud fraction using UKMO random overlapping method"/>
+
+        <var name="cldht_top_UKMO"          type="real"     dimensions="nCells Time" units="m"  missing_value="-999.0"
+             description="Cloud top height using UKMO method"/>
+
+        <var name="cldht_base_UKMO"         type="real"     dimensions="nCells Time" units="m"  missing_value="-999.0"
+             description="Cloud base height using UKMO method"/>
 
 </var_struct>
 
