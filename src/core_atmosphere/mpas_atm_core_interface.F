@@ -306,7 +306,6 @@ module atm_core_interface
       logical, pointer :: config_use_static
       ierr = 0
 
-call mpas_log_write('jban check before static read mpas_atm_core_interface.F')
       call mpas_pool_get_config(configs, 'config_do_restart', config_do_restart)
       call mpas_pool_get_config(configs, 'config_use_static', config_use_static)
       if (.not. associated(config_do_restart)) then
