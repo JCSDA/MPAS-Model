@@ -314,7 +314,7 @@ call mpas_log_write('jban check before static read mpas_atm_core_interface.F')
          ierr = 1
       else if (config_do_restart) then
          write(stream,'(a)') 'restart'
-      else if (.not. config_do_restart .and. config_use_static) then
+      else if (config_use_static) then
          write(stream,'(a)') 'static'
       else
          write(stream,'(a)') 'input'
