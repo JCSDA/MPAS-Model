@@ -303,17 +303,17 @@ module atm_core_interface
       integer :: ierr
 
       logical, pointer :: config_do_restart
-      logical, pointer :: config_use_static
+      logical, pointer :: config_use_2streams_ic
       ierr = 0
 
       call mpas_pool_get_config(configs, 'config_do_restart', config_do_restart)
-      call mpas_pool_get_config(configs, 'config_use_static', config_use_static)
+      call mpas_pool_get_config(configs, 'config_use_2streams_ic', config_use_2streams_ic)
       if (.not. associated(config_do_restart)) then
          call mpas_log_write('config_do_restart was not found when defining mesh stream.', messageType=MPAS_LOG_ERR)
          ierr = 1
       else if (config_do_restart) then
          write(stream,'(a)') 'restart'
-      else if (config_use_static) then
+      else if (config_use_2streams_ic) then
          write(stream,'(a)') 'static'
       else
          write(stream,'(a)') 'input'
