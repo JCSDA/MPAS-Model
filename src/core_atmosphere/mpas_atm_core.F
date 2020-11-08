@@ -38,7 +38,6 @@ module atm_core
 
       integer :: i
       logical, pointer :: config_do_restart
-      logical, pointer :: config_use_2streams_ic
 
       type (mpas_pool_type), pointer :: state
       type (mpas_pool_type), pointer :: mesh
@@ -81,7 +80,7 @@ module atm_core
 
       call mpas_pool_get_config(domain % blocklist % configs, 'config_do_restart', config_do_restart)
       call mpas_pool_get_config(domain % blocklist % configs, 'config_dt', dt)
-      call mpas_pool_get_config(domain % blocklist % configs, 'config_use_2streams_ic', config_use_2streams_ic)
+
 
       !
       ! If this is a restart run, read the restart stream, else read the input
@@ -90,29 +89,21 @@ module atm_core
       ! input alarms for both input and restart before reading any remaining
       ! input streams.
       !
-      if (config_use_2streams_ic) then
-         call MPAS_stream_mgr_read(domain % streamManager, streamID='static', whence=MPAS_STREAM_NEAREST, ierr=ierr)
-         if (ierr /= MPAS_STREAM_MGR_NOERR) then
-            call mpas_log_write('********************************************************************************', messageType=MPAS_LOG_ERR)
-            call mpas_log_write('Error reading static fields',                                                      messageType=MPAS_LOG_ERR)
-            call mpas_log_write('********************************************************************************', messageType=MPAS_LOG_CRIT)
-         end if
-         call MPAS_stream_mgr_reset_alarms(domain % streamManager, streamID='static', direction=MPAS_STREAM_INPUT, ierr=ierr)
-      end if
-
       if (config_do_restart) then
          call MPAS_stream_mgr_read(domain % streamManager, streamID='restart', ierr=ierr)
       else
+         call MPAS_stream_mgr_read(domain % streamManager, streamID='static', whence=MPAS_STREAM_NEAREST, ierr=ierr)
          call MPAS_stream_mgr_read(domain % streamManager, streamID='input', ierr=ierr)
       end if
+
       if (ierr /= MPAS_STREAM_MGR_NOERR) then
          call mpas_log_write('********************************************************************************', messageType=MPAS_LOG_ERR)
          call mpas_log_write('Error reading initial conditions',                                                 messageType=MPAS_LOG_ERR)
          call mpas_log_write('********************************************************************************', messageType=MPAS_LOG_CRIT)
       end if
+      call MPAS_stream_mgr_reset_alarms(domain % streamManager, streamID='static', direction=MPAS_STREAM_INPUT, ierr=ierr)
       call MPAS_stream_mgr_reset_alarms(domain % streamManager, streamID='input', direction=MPAS_STREAM_INPUT, ierr=ierr)
       call MPAS_stream_mgr_reset_alarms(domain % streamManager, streamID='restart', direction=MPAS_STREAM_INPUT, ierr=ierr)
-
       !
       ! Read all other inputs
       ! For now we don't do this here to match results with previous code; to match requires 

@@ -333,12 +333,6 @@
                      units="-"
                      description="Whether to re-compute coupled fields $\theta_m$, $\tilde{\rho}$, $\rho u$, etc. from uncoupled fields when restarting the model; used for cycling DA experiments that analyze uncoupled fields in restart files"
                      possible_values=".true. or .false."/>
-
-                <nml_option name="config_use_2streams_ic" type="logical" default_value="false" in_defaults="false"
-                     units="-"
-                     description="Whether to use static and input streams"
-                     possible_values=".true. or .false."/>
-
         </nml_record>
 
         <nml_record name="printout" in_defaults="true">
