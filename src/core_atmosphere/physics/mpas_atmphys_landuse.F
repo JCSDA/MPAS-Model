@@ -272,17 +272,15 @@
     
     !set no data points to water:
     if(is.eq.0) is = iswater
-    if (.not. config_do_DAcycling) then
-       if(.not. config_sfc_albedo) albbck(iCell) = albd(is,isn)/100.
-       sfc_albedo(iCell) = albbck(iCell)
+    if(.not. config_sfc_albedo) albbck(iCell) = albd(is,isn)/100.
+    sfc_albedo(iCell) = albbck(iCell)
 
-       if(snowc(iCell) .gt. 0.5) then
-          albbck(iCell) = albd(isice,isn) / 100.
-          if(config_sfc_albedo) then
-             sfc_albedo(iCell) = snoalb(iCell)
-          else
-             sfc_albedo(iCell) = albbck(iCell) / (1+scfx(is,isn))
-          endif
+    if(snowc(iCell) .gt. 0.5) then
+       albbck(iCell) = albd(isice,isn) / 100.
+       if(config_sfc_albedo) then
+          sfc_albedo(iCell) = snoalb(iCell)
+       else
+          sfc_albedo(iCell) = albbck(iCell) / (1+scfx(is,isn))
        endif
     endif
     thc(iCell)    = therin(is,isn) / 100.
@@ -296,16 +294,16 @@
  
     !set sea-ice points to land with ice/snow surface properties:
     if(xice(iCell) .ge. xice_threshold) then
-       if (.not. config_do_DAcycling) albbck(iCell) = albd(isice,isn) / 100.
+       albbck(iCell) = albd(isice,isn) / 100.
        embck(iCell)  = sfem(isice,isn)
-       if (.not. config_do_DAcycling) sfc_albedo_seaice(iCell) = albbck(iCell)
+       sfc_albedo_seaice(iCell) = albbck(iCell)
        if(config_frac_seaice) then
           !0.08 is the albedo over open water.
           !0.98 is the emissivity over open water.
-          if (.not. config_do_DAcycling) sfc_albedo(iCell) = xice(iCell)*albbck(iCell) + (1-xice(iCell))*0.08
+          sfc_albedo(iCell) = xice(iCell)*albbck(iCell) + (1-xice(iCell))*0.08
           sfc_emiss(iCell)  = xice(iCell)*embck(iCell)  + (1-xice(iCell))*0.98
        else
-          if (.not. config_do_DAcycling) sfc_albedo(iCell) = albbck(iCell)
+          sfc_albedo(iCell) = albbck(iCell)
           sfc_emiss(iCell)  = embck(iCell)
        endif
        thc(iCell) = therin(isice,isn) / 100.
@@ -315,7 +313,7 @@
        if(associated(mavail)) mavail(iCell) = slmo(isice,isn)
     else
        !over seaice-free cells, initialize sfc_albedo_seaice with the background surface albedo:
-       if (.not. config_do_DAcycling) sfc_albedo_seaice(iCell) = albbck(iCell)
+       sfc_albedo_seaice(iCell) = albbck(iCell)
     endif
 
  enddo
