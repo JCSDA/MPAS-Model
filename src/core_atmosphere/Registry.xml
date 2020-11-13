@@ -532,9 +532,9 @@
 			<var name="lai"/>
 			<var name="isice_lu"/>
 			<var name="iswater_lu"/>
-			<var name="sfc_albbck"/>
-			<var name="sfc_albedo_seaice"/>
-			<var name="sfc_albedo"/>
+<!-- 			<var name="sfc_albbck"/> -->
+<!-- 			<var name="sfc_albedo_seaice"/> -->
+<!-- 			<var name="sfc_albedo"/> -->
 			<var name="skintemp"/>
 			<var name="snow"/>
 			<var name="snowc"/>
@@ -553,6 +553,17 @@
 			<var name="tslb"/>
 			<var name="precipw"/>
 			<var name="h_oml_initial"/>
+			<var name="sfc_emibck"/>
+			<var name="mavail"/>
+			<var name="sfc_albbck"/>
+			<var name="sfc_albedo"/>
+			<var name="sfc_albedo_seaice"/>
+			<var name="sfc_emiss"/>
+			<var name="thc"/>
+			<var name="ust"/>
+			<var name="xicem"/>
+			<var name="z0"/>
+			<var name="znt"/>
 		</stream>
 
 		<stream name="restart" 
@@ -1187,9 +1198,9 @@
 			<var name="lai"/>
 			<var name="isice_lu"/>
 			<var name="iswater_lu"/>
-			<var name="sfc_albbck"/>
-			<var name="sfc_albedo_seaice"/>
-			<var name="sfc_albedo"/>
+<!-- 			<var name="sfc_albbck"/> -->
+<!-- 			<var name="sfc_albedo_seaice"/> -->
+<!-- 			<var name="sfc_albedo"/> -->
 			<var name="skintemp"/>
 			<var name="snow"/>
 			<var name="snowc"/>
@@ -1208,6 +1219,17 @@
 			<var name="tslb"/>
 			<var name="precipw"/>
 			<var name="h_oml_initial"/>
+			<var name="sfc_emibck"/>
+			<var name="mavail"/>
+			<var name="sfc_albbck"/>
+			<var name="sfc_albedo"/>
+			<var name="sfc_albedo_seaice"/>
+			<var name="sfc_emiss"/>
+			<var name="thc"/>
+			<var name="ust"/>
+			<var name="xicem"/>
+			<var name="z0"/>
+			<var name="znt"/>
                 </stream>
 	</streams>
 
