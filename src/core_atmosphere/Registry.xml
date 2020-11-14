@@ -532,9 +532,6 @@
 			<var name="lai"/>
 			<var name="isice_lu"/>
 			<var name="iswater_lu"/>
-<!-- 			<var name="sfc_albbck"/> -->
-<!-- 			<var name="sfc_albedo_seaice"/> -->
-<!-- 			<var name="sfc_albedo"/> -->
 			<var name="skintemp"/>
 			<var name="snow"/>
 			<var name="snowc"/>
@@ -1198,9 +1195,6 @@
 			<var name="lai"/>
 			<var name="isice_lu"/>
 			<var name="iswater_lu"/>
-<!-- 			<var name="sfc_albbck"/> -->
-<!-- 			<var name="sfc_albedo_seaice"/> -->
-<!-- 			<var name="sfc_albedo"/> -->
 			<var name="skintemp"/>
 			<var name="snow"/>
 			<var name="snowc"/>
