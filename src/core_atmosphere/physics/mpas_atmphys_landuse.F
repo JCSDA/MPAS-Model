@@ -255,6 +255,7 @@
 !call mpas_log_write('--- isurban =$i',intArgs=(/isurban/))
  if(config_do_restart .or. config_do_DAcycling) then
     call mpas_log_write('--- config_do_restart =$l', logicArgs=(/config_do_restart/))
+    call mpas_log_write('--- config_do_DAcycling =$l', logicArgs=(/config_do_DAcycling/))
     call mpas_log_write('--- skip the end of landuse_init_forMPAS')
     return
  endif
