@@ -28,7 +28,10 @@
                    !< (stored here to eliminate the need for dminfo later)
       character(len=StrKIND) :: coreName  !< name of the core to which this log manager instance belongs
       integer :: domainID !< domain number for this instance of the log manager
-      logical :: initialized_mpi
+!<<<<<<< HEAD
+!      logical :: initialized_mpi
+!=======
+!>>>>>>> develop
 
       integer :: outputMessageCount  !< counter for number of output messages printed during the run
       integer :: warningMessageCount  !< counter for number of warning messages printed during the run
