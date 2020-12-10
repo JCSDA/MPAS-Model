@@ -180,12 +180,6 @@ module mpas_log
       !   This will be used to number the log files
       mpas_log_info % domainID = domain % domainID
 
-!<<<<<<< HEAD
-!      !   This will be used to decide whether to abort MPI
-!      mpas_log_info % initialized_mpi = domain % dminfo % initialized_mpi
-!
-!=======
-!>>>>>>> develop
       ! Set log file to be active or not based on master/nonmaster task and optimized/debug build
       !   * Optimized build: Only master task log is active
       !   * Debug build: All tasks active
@@ -853,13 +847,7 @@ module mpas_log
       deallocate(mpas_log_info)
 
 #ifdef _MPI
-!<<<<<<< HEAD
-!      if ( mpas_log_info % initialized_mpi ) then
-!         call MPI_Abort(MPI_COMM_WORLD, mpi_errcode, mpi_ierr)
-!      end if
-!=======
       call MPI_Abort(MPI_COMM_WORLD, mpi_errcode, mpi_ierr)
-!>>>>>>> develop
 #else
       stop
 #endif
