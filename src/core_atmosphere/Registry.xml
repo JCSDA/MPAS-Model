@@ -1668,10 +1668,6 @@
                      description="Saturation specific humidity"
                      packages="jedi_da"/>
 
-                <var name="pseudo_relhum" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1}"
-                     description="Pseudo relative humidity"
-                     packages="jedi_da"/>
-
                 <var name="v" type="real" dimensions="nVertLevels nEdges Time" units="m s^{-1}"
                      description="Horizontal tangential velocity at edges"/>
 
