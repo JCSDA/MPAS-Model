@@ -53,8 +53,8 @@ module mpas_subdriver
       type (core_type), intent(inout), pointer :: corelist
       type (domain_type), intent(inout), pointer :: domain_ptr
       integer, intent(in), optional :: mpi_comm
-      character(len=StrKIND), intent(in), optional :: namelistFileParam
-      character(len=StrKIND), intent(in), optional :: streamsFileParam
+      character(len=*), intent(in), optional :: namelistFileParam
+      character(len=*), intent(in), optional :: streamsFileParam
       
 
       integer :: iArg, nArgs
@@ -112,11 +112,11 @@ module mpas_subdriver
       readNamelistArg = .false.
       readStreamsArg = .false.
 
-      if (present(namelistFileParam)) then
+      if (present(namelistFileParam) .and. len_trim(namelistFileParam) > 0 ) then
          readNamelistArg = .true.
          namelistFile = trim(namelistFileParam)
       endif
-      if (present(streamsFileParam)) then
+      if (present(streamsFileParam)  .and. len_trim(streamsFileParam) > 0 ) then
          readStreamsArg = .true.
          streamsFile = trim(streamsFileParam)
       endif
