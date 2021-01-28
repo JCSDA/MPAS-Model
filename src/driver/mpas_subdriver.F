@@ -56,7 +56,6 @@ module mpas_subdriver
       character(len=*), intent(in), optional :: namelistFileParam
       character(len=*), intent(in), optional :: streamsFileParam
       
-
       integer :: iArg, nArgs
       logical :: readNamelistArg, readStreamsArg
       character(len=StrKIND) :: argument, namelistFile, streamsFile
