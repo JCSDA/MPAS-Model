@@ -17,14 +17,14 @@ if(MPAS_CORES MATCHES " ") #Convert strings separated with spaces to CMake list 
 endif()
 option(MPAS_DOUBLE_PRECISION "Use double precision 64-bit Floating point." TRUE)
 option(MPAS_PROFILE "Enable GPTL profiling" OFF)
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(MPAS_OPENMP "Enable OpenMP" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 message(STATUS "[OPTION] MPAS_CORES: ${MPAS_CORES}")
 message(STATUS "[OPTION] MPAS_DOUBLE_PRECISION: ${MPAS_DOUBLE_PRECISION}")
 message(STATUS "[OPTION] MPAS_PROFILE: ${MPAS_PROFILE}")
-message(STATUS "[OPTION] BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 message(STATUS "[OPTION] MPAS_OPENMP: ${MPAS_OPENMP}")
+message(STATUS "[OPTION] BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 
 # Build product output locations
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
