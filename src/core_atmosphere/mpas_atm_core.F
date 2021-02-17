@@ -290,7 +290,6 @@ module atm_core
       
       real (kind=RKIND), dimension(:,:), pointer :: u, uReconstructX, uReconstructY, uReconstructZ, uReconstructZonal, uReconstructMeridional
       real (kind=RKIND), dimension(:), pointer :: meshScalingDel2, meshScalingDel4
-      real (kind=RKIND), dimension(:), pointer :: meshScalingRegionalCell, meshScalingRegionalEdge
       real (kind=RKIND), dimension(:), pointer :: areaCell, invAreaCell
       real (kind=RKIND), dimension(:), pointer :: dvEdge, invDvEdge
       real (kind=RKIND), dimension(:), pointer :: dcEdge, invDcEdge

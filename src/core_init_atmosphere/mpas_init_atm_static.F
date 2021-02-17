@@ -829,6 +829,8 @@
 !
  if (trim(config_maxsnowalbedo_data) == 'MODIS') then
 
+    geog_sub_path = 'maxsnowalb_modis/'
+
     call mpas_log_write('Using MODIS 0.05-deg data for maximum snow albedo')
     if (supersample_fac > 1) then
        call mpas_log_write('   Dataset will be supersampled by a factor of $i', intArgs=(/supersample_fac/))
