@@ -487,8 +487,6 @@
 			<var name="snoalb"/>
 			<var name="albedo12m"/>
 			<var name="greenfrac"/>
-			<var name="pin"/>
-			<var name="ozmixm"/>
                 </stream>
 
 		<stream name="input" 
