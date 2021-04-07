@@ -1,7 +1,7 @@
 # MPAS/src/core_sw
 #
 # Targets
-#   MPAS::core::sw
+#   mpas::core::sw
 
 ## Generated includes
 set(sw_core_inc

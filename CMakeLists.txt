@@ -1,6 +1,6 @@
 ## MPAS-Model
 cmake_minimum_required(VERSION 3.12)
-project(MPAS LANGUAGES C Fortran VERSION 7.0 DESCRIPTION "MPAS - Model for Prediction Across Scales")
+project(mpas VERSION 7.0 LANGUAGES C Fortran DESCRIPTION "mpas - Model for Prediction Across Scales")
 
 ### Global Configuration
 
@@ -40,7 +40,7 @@ endif()
 
 # Detect MPAS git version
 if(NOT MPAS_GIT_VERSION)
-    find_package(Git QUIET)
+    find_package(git 0.1 QUIET)
     if(GIT_FOUND)
         execute_process(COMMAND ${GIT_EXECUTABLE} describe --dirty
                         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
@@ -53,8 +53,9 @@ if(NOT MPAS_GIT_VERSION)
 endif()
 
 ### Dependencies
-find_package(OpenMP COMPONENTS Fortran)
-find_package(MPI REQUIRED COMPONENTS Fortran)
+find_package( jedicmake QUIET )
+ecbuild_enable_omp()
+ecbuild_find_mpi( COMPONENTS Fortran REQUIRED )
 find_package(NetCDF REQUIRED COMPONENTS Fortran)
 find_package(PnetCDF REQUIRED COMPONENTS Fortran)
 find_package(PIO REQUIRED COMPONENTS Fortran C)
@@ -129,14 +130,14 @@ endmacro()
 ##
 # mpas_core_target(CORE <core-name> TARGET <cmake-target-name> INCLUDE <file1.inc, ...> )
 #
-# Common configuration and properties for `MPAS::core::<core_name>` targets.
+# Common configuration and properties for `mpas::core::<core_name>` targets.
 # * Calls mpas_fortran_target() for common Fortran target configuration.
 # * Installs Fortran modules to a per-core directory and adds target include directories
 #   appropriate for build and install trees.
 # * XML Processing, parsing and generation of includes, namelists and streams
 #   * Each core uses a core-specific parser executable
-# * Links to MPAS::framework and MPAS::operators
-# * Exports MPAS::core::<core_name> target alias for use by external dependencies
+# * Links to mpas::framework and mpas::operators
+# * Exports mpas::core::<core_name> target alias for use by external dependencies
 # * Installs core libraries modules and generated files.
 #
 #  Args:
@@ -171,16 +172,16 @@ macro(mpas_core_target)
     target_include_directories(${_ARG_TARGET} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
     #Core-independent library dependencies
-    target_link_libraries(${_ARG_TARGET} PUBLIC MPAS::framework)
-    target_link_libraries(${_ARG_TARGET} PUBLIC MPAS::operators)
+    target_link_libraries(${_ARG_TARGET} PUBLIC mpas::framework)
+    target_link_libraries(${_ARG_TARGET} PUBLIC mpas::operators)
 
     #Define alias for external use
-    add_library(MPAS::core::${_ARG_CORE} ALIAS ${_ARG_TARGET})
+    add_library(mpas::core::${_ARG_CORE} ALIAS ${_ARG_TARGET})
 
     #Create main executable
     add_executable(mpas_${_ARG_CORE} ${MPAS_MAIN_SRC})
     mpas_fortran_target(mpas_${_ARG_CORE})
-    target_link_libraries(mpas_${_ARG_CORE} PUBLIC MPAS::core::${_ARG_CORE})
+    target_link_libraries(mpas_${_ARG_CORE} PUBLIC mpas::core::${_ARG_CORE})
 
     #Per-core generated output and tables directory location
     set(CORE_DATADIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${_ARG_TARGET})
@@ -231,15 +232,15 @@ set(MPAS_MAIN_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/src/driver/mpas.F)
 set(MPAS_SUBDRIVER_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/src/driver/mpas_subdriver.F)
 
 ## Create targets
-add_subdirectory(src/external/ezxml) # Target: MPAS::external::ezxml
-add_subdirectory(src/external/esmf_time_f90) # Target: MPAS::external::esmf_time
+add_subdirectory(src/external/ezxml) # Target: mpas::external::ezxml
+add_subdirectory(src/external/esmf_time_f90) # Target: mpas::external::esmf_time
 add_subdirectory(src/tools/input_gen) # Targets: namelist_gen, streams_gen
 add_subdirectory(src/tools/registry) # Targets: mpas_parse_<core_name>
-add_subdirectory(src/framework) # Target: MPAS::framework
-add_subdirectory(src/operators) # Target: MPAS::operators
+add_subdirectory(src/framework) # Target: mpas::framework
+add_subdirectory(src/operators) # Target: mpas::operators
 
 foreach(_core IN LISTS MPAS_CORES)
-    add_subdirectory(src/core_${_core}) # Target: MPAS::core::<core_name>
+    add_subdirectory(src/core_${_core}) # Target: mpas::core::<core_name>
 endforeach()
 
 ### Package config

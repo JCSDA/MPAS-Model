@@ -1,7 +1,7 @@
 # MPAS/src/core_init_atmosphere
 #
 # Targets
-#   MPAS::core::init_atmosphere
+#   mpas::core::init_atmosphere
 
 ## Generated includes
 set(init_atm_core_inc
