@@ -53,9 +53,8 @@ if(NOT MPAS_GIT_VERSION)
 endif()
 
 ### Dependencies
-find_package( jedicmake QUIET )
-ecbuild_enable_omp()
-ecbuild_find_mpi( COMPONENTS Fortran REQUIRED )
+find_package(OpenMP COMPONENTS Fortran)
+find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(NetCDF REQUIRED COMPONENTS Fortran)
 find_package(PnetCDF REQUIRED COMPONENTS Fortran)
 find_package(PIO REQUIRED COMPONENTS Fortran C)

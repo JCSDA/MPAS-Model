@@ -109,8 +109,7 @@ if(NOT @PROJECT_NAME@_FIND_QUIETLY)
         endif()
     endforeach()
 
-    get_target_property(location @PROJECT_NAME@::framework LOCATION) #Get location from any component
-    message(STATUS "Found @PROJECT_NAME@: ${location} (version: \"@PROJECT_VERSION@\") (components: ${_found_components})")
+    message(STATUS "Found @PROJECT_NAME@: (version: \"@PROJECT_VERSION@\") (components: ${_found_components})")
     unset(_found_components)
     unset(_all_components)
 endif()
