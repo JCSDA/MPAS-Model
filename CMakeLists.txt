@@ -40,7 +40,7 @@ endif()
 
 # Detect MPAS git version
 if(NOT MPAS_GIT_VERSION)
-    find_package(git 0.1 QUIET)
+    find_package(Git QUIET)
     if(GIT_FOUND)
         execute_process(COMMAND ${GIT_EXECUTABLE} describe --dirty
                         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
