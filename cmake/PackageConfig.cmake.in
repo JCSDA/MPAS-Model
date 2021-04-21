@@ -37,7 +37,7 @@
 
 #Include targets file.  This will create IMPORTED target @PROJECT_NAME@
 string(TOLOWER @PROJECT_NAME@ _project_name_lower)
-if(NOT TARGET mpas::framework)
+if(NOT TARGET @PROJECT_NAME@::framework)
     include("${CMAKE_CURRENT_LIST_DIR}/${_project_name_lower}-targets-external.cmake")
     include("${CMAKE_CURRENT_LIST_DIR}/${_project_name_lower}-targets.cmake")
     include("${CMAKE_CURRENT_LIST_DIR}/${_project_name_lower}-targets-core.cmake")
