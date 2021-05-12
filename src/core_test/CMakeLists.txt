@@ -1,7 +1,7 @@
 # MPAS/src/core_test
 #
 # Targets
-#   mpas::core::test
+#   MPAS::core::test
 
 ## Generated includes
 set(test_core_inc

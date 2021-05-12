@@ -1,6 +1,6 @@
 ## MPAS-Model
 cmake_minimum_required(VERSION 3.12)
-project(mpas LANGUAGES C Fortran VERSION 7.0 DESCRIPTION "mpas - Model for Prediction Across Scales")
+project(MPAS LANGUAGES C Fortran VERSION 7.0 DESCRIPTION "MPAS - Model for Prediction Across Scales")
 
 ### Global Configuration
 
@@ -129,14 +129,14 @@ endmacro()
 ##
 # mpas_core_target(CORE <core-name> TARGET <cmake-target-name> INCLUDE <file1.inc, ...> )
 #
-# Common configuration and properties for `mpas::core::<core_name>` targets.
+# Common configuration and properties for `MPAS::core::<core_name>` targets.
 # * Calls mpas_fortran_target() for common Fortran target configuration.
 # * Installs Fortran modules to a per-core directory and adds target include directories
 #   appropriate for build and install trees.
 # * XML Processing, parsing and generation of includes, namelists and streams
 #   * Each core uses a core-specific parser executable
-# * Links to mpas::framework and mpas::operators
-# * Exports mpas::core::<core_name> target alias for use by external dependencies
+# * Links to MPAS::framework and MPAS::operators
+# * Exports MPAS::core::<core_name> target alias for use by external dependencies
 # * Installs core libraries modules and generated files.
 #
 #  Args:
@@ -231,15 +231,15 @@ set(MPAS_MAIN_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/src/driver/mpas.F)
 set(MPAS_SUBDRIVER_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/src/driver/mpas_subdriver.F)
 
 ## Create targets
-add_subdirectory(src/external/ezxml) # Target: mpas::external::ezxml
-add_subdirectory(src/external/esmf_time_f90) # Target: mpas::external::esmf_time
+add_subdirectory(src/external/ezxml) # Target: MPAS::external::ezxml
+add_subdirectory(src/external/esmf_time_f90) # Target: MPAS::external::esmf_time
 add_subdirectory(src/tools/input_gen) # Targets: namelist_gen, streams_gen
 add_subdirectory(src/tools/registry) # Targets: mpas_parse_<core_name>
-add_subdirectory(src/framework) # Target: mpas::framework
-add_subdirectory(src/operators) # Target: mpas::operators
+add_subdirectory(src/framework) # Target: MPAS::framework
+add_subdirectory(src/operators) # Target: MPAS::operators
 
 foreach(_core IN LISTS MPAS_CORES)
-    add_subdirectory(src/core_${_core}) # Target: mpas::core::<core_name>
+    add_subdirectory(src/core_${_core}) # Target: MPAS::core::<core_name>
 endforeach()
 
 ### Package config
